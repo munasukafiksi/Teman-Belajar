@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teman Belajar — Ruang Belajar Siswa</title>
+  <style>
+    :root {
+      --bg-main: #12141a;
+      --bg-card: #1b1e28;
+      --bg-input: #252936;
+      --text-primary: #f1f3f8;
+      --text-secondary: #a0a6b8;
+      --pastel-pink: #f8b4c8;
+      --pastel-blue: #a3d5ff;
+      --pastel-green: #b5ead7;
+      --pastel-yellow: #ffdf9e;
+      --pastel-purple: #cbb4f8;
+      --danger: #ff9aa2;
+      --border-radius: 14px;
+      --transition: 0.25s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1, h2, h3, .bold-title {
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: bold;
+    }
+
+    p, span, input, textarea, select, button, label {
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: normal;
+    }
+
+    /* Header & Navigation */
+    header {
+      background-color: var(--bg-card);
+      padding: 18px 24px;
+      border-bottom: 1px solid #2b3040;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--pastel-blue), var(--pastel-purple));
+      color: #12141a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .brand h1 {
+      font-size: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    .brand span {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: block;
+    }
+
+    nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background-color: var(--bg-input);
+      color: var(--text-secondary);
+      border: none;
+      padding: 9px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: var(--transition);
+    }
+
+    .nav-btn:hover {
+      color: var(--text-primary);
+      background-color: #2f3445;
+    }
+
+    .nav-btn.active {
+      background-color: var(--pastel-blue);
+      color: #12141a;
+      font-weight: bold;
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1100px;
+      width: 100%;
+      margin: 24px auto;
+      padding: 0 18px;
+      flex: 1;
+    }
+
+    .tab-section {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header {
+      margin-bottom: 20px;
+    }
+
+    .section-header h2 {
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    .section-header p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    /* Cards & Forms */
+    .card {
+      background-color: var(--bg-card);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      border: 1px solid #282d3d;
+      margin-bottom: 20px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav {
+        width: 100%;
+      }
+      .nav-btn {
+        flex: 1;
+        text-align: center;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    textarea,
+    select {
+      width: 100%;
+      background-color: var(--bg-input);
+      border: 1px solid #33394d;
+      color: var(--text-primary);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--pastel-blue);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .btn {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: #12141a;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn-blue { background-color: var(--pastel-blue); }
+    .btn-green { background-color: var(--pastel-green); }
+    .btn-pink { background-color: var(--pastel-pink); }
+    .btn-yellow { background-color: var(--pastel-yellow); }
+    .btn-purple { background-color: var(--pastel-purple); }
+    .btn-danger { background-color: var(--danger); }
+    .btn-ghost {
+      background-color: var(--bg-input);
+      color: var(--text-primary);
+      font-weight: normal;
+    }
+
+    /* 1. TO-DO LIST STYLES */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    .group-pill {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      background-color: var(--bg-input);
+      color: var(--text-secondary);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .group-pill.active {
+      background-color: var(--pastel-purple);
+      color: #12141a;
+      font-weight: bold;
+    }
+
+    .todo-item {
+      background-color: var(--bg-input);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      border-left: 4px solid var(--pastel-green);
+      transition: var(--transition);
+    }
+
+    .todo-item.completed {
+      opacity: 0.55;
+      border-left-color: #555c70;
+    }
+
+    .todo-item.completed .todo-title {
+      text-decoration: line-through;
+    }
+
+    .todo-left {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      flex: 1;
+    }
+
+    .todo-checkbox {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--pastel-green);
+      cursor: pointer;
+    }
+
+    .todo-content {
+      flex: 1;
+    }
+
+    .todo-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .todo-title {
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .badge-group {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 8px;
+      background-color: rgba(203, 180, 248, 0.2);
+      color: var(--pastel-purple);
+      font-weight: bold;
+    }
+
+    .todo-note {
+      font-size: 13px;
+      color: var(--text-secondary);
+      white-space: pre-wrap;
+      margin-top: 4px;
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .icon-btn:hover {
+      background-color: #32374a;
+      color: var(--danger);
+    }
+
+    /* 2. POMODORO STYLES */
+    .pomodoro-box {
+      text-align: center;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .mode-switch {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .mode-btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: none;
+      background-color: var(--bg-input);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .mode-btn.active {
+      background-color: var(--pastel-pink);
+      color: #12141a;
+      font-weight: bold;
+    }
+
+    .timer-circle {
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      margin: 0 auto 24px;
+      border: 6px solid var(--pastel-pink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #161821;
+      box-shadow: 0 0 25px rgba(248, 180, 200, 0.12);
+    }
+
+    .timer-display {
+      font-size: 48px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .timer-status {
+      font-size: 13px;
+      color: var(--pastel-pink);
+      margin-top: 4px;
+    }
+
+    .timer-controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .custom-duration {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding-top: 18px;
+      border-top: 1px solid #2b3040;
+      text-align: left;
+    }
+
+    /* 3. KALENDER & PENGINGAT STYLES */
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      text-align: center;
+    }
+
+    .cal-day-name {
+      font-size: 12px;
+      font-weight: bold;
+      color: var(--text-secondary);
+      padding-bottom: 8px;
+    }
+
+    .cal-cell {
+      background-color: var(--bg-input);
+      border-radius: 10px;
+      min-height: 62px;
+      padding: 6px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid transparent;
+      transition: var(--transition);
+    }
+
+    .cal-cell:hover {
+      border-color: var(--pastel-yellow);
+    }
+
+    .cal-cell.empty {
+      background-color: transparent;
+      cursor: default;
+      border: none;
+    }
+
+    .cal-cell.today {
+      border-color: var(--pastel-blue);
+    }
+
+    .cal-cell.selected {
+      background-color: rgba(255, 223, 158, 0.18);
+      border-color: var(--pastel-yellow);
+    }
+
+    .cal-date-num {
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .cal-dot-wrap {
+      display: flex;
+      gap: 3px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .cal-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--pastel-yellow);
+    }
+
+    .event-item {
+      background-color: var(--bg-input);
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--pastel-yellow);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .event-time {
+      font-size: 12px;
+      color: var(--pastel-yellow);
+      font-weight: bold;
+    }
+
+    /* 4. FLASH CARD MINI GAME STYLES */
+    .flashcard-stage {
+      perspective: 1000px;
+      margin: 20px auto;
+      max-width: 540px;
+    }
+
+    .flashcard-inner {
+      width: 100%;
+      min-height: 240px;
+      position: relative;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      cursor: pointer;
+    }
+
+    .flashcard-inner.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .flashcard-face {
+      position: absolute;
+      width: 100%;
+      min-height: 240px;
+      backface-visibility: hidden;
+      background-color: var(--bg-input);
+      border-radius: 16px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 2px solid var(--pastel-purple);
+    }
+
+    .flashcard-back {
+      transform: rotateY(180deg);
+      border-color: var(--pastel-green);
+      background-color: #1f2633;
+    }
+
+    .card-tag {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+    }
+
+    .flashcard-text {
+      font-size: 19px;
+      font-weight: bold;
+      line-height: 1.5;
+    }
+
+    .flashcard-hint {
+      position: absolute;
+      bottom: 12px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .game-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--bg-input);
+      padding: 12px 18px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .game-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--pastel-yellow);
+      color: #12141a;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      z-index: 999;
+      display: none;
+      max-width: 320px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--text-secondary);
+      font-size: 12px;
+      border-top: 1px solid #222634;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="brand-badge">TB</div>
+      <div>
+        <h1>Teman Belajar</h1>
+        <span>Atur waktu, tata tugas, dan review materi</span>
+      </div>
+    </div>
+    <nav>
+      <button class="nav-btn active" onclick="switchTab('todo', this)">To-Do Tugas</button>
+      <button class="nav-btn" onclick="switchTab('pomodoro', this)">Timer Pomodoro</button>
+      <button class="nav-btn" onclick="switchTab('calendar', this)">Kalender & Pengingat</button>
+      <button class="nav-btn" onclick="switchTab('flashcard', this)">Flash Card Game</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 1. FITUR TO-DO LIST -->
+    <section id="todo" class="tab-section active">
+      <div class="section-header">
+        <h2>Daftar Tugas & Catatan</h2>
+        <p>Kelompokkan tugas berdasarkan mata pelajaran atau prioritas lengkap dengan catatan detail.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="margin-bottom: 14px; color: var(--pastel-green);">Tambah Tugas Baru</h3>
+          <div class="form-group">
+            <label>Judul Tugas</label>
+            <input type="text" id="todoTitle" placeholder="Contoh: Rangkuman Bab 3 Sejarah" />
+          </div>
+          <div class="form-group">
+            <label>Kelompok / Kategori (Ketik baru atau pilih yang ada)</label>
+            <input type="text" id="todoGroup" list="groupSuggestions" placeholder="Contoh: Matematika, PR Harian, Ujian" />
+            <datalist id="groupSuggestions"></datalist>
+          </div>
+          <div class="form-group">
+            <label>Catatan Tambahan</label>
+            <textarea id="todoNote" placeholder="Tulis halaman buku, rumus penting, atau instruksi guru..."></textarea>
+          </div>
+          <button class="btn btn-green" style="width: 100%;" onclick="addTodo()">+ Simpan Tugas</button>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom: 12px;">Daftar Tugas Kamu</h3>
+          <div class="filter-bar" id="groupFilterBar"></div>
+          <div id="todoListContainer"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. FITUR POMODORO TIMER -->
+    <section id="pomodoro" class="tab-section">
+      <div class="section-header">
+        <h2>Timer Pomodoro</h2>
+        <p>Jaga fokus belajar dengan ritme kerja dan istirahat yang dapat kamu atur sendiri.</p>
+      </div>
+
+      <div class="card pomodoro-box">
+        <div class="mode-switch">
+          <button class="mode-btn active" id="btnModeFocus" onclick="setTimerMode('focus')">Waktu Fokus</button>
+          <button class="mode-btn" id="btnModeBreak" onclick="setTimerMode('break')">Waktu Istirahat</button>
+        </div>
+
+        <div class="timer-circle" id="timerCircle">
+          <div class="timer-display" id="timerDisplay">25:00</div>
+          <div class="timer-status" id="timerStatus">Siap Belajar</div>
+        </div>
+
+        <div class="timer-controls">
+          <button class="btn btn-pink" id="startPauseBtn" onclick="toggleTimer()">Mulai</button>
+          <button class="btn btn-ghost" onclick="resetTimer()">Reset</button>
+        </div>
+
+        <div class="custom-duration">
+          <div>
+            <label style="font-size: 12px; color: var(--text-secondary);">Durasi Fokus (menit)</label>
+            <input type="number" id="focusInput" value="25" min="1" max="180" onchange="updateCustomDurations()" />
+          </div>
+          <div>
+            <label style="font-size: 12px; color: var(--text-secondary);">Durasi Istirahat (menit)</label>
+            <input type="number" id="breakInput" value="5" min="1" max="60" onchange="updateCustomDurations()" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. FITUR KALENDER & PENGINGAT -->
+    <section id="calendar" class="tab-section">
+      <div class="section-header">
+        <h2>Kalender & Pengingat Jadwal</h2>
+        <p>Klik tanggal untuk melihat atau menambahkan catatan jadwal belajar dan pengingat tugas.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="calendar-header">
+            <button class="btn btn-ghost" onclick="changeMonth(-1)">&lt;</button>
+            <h3 id="calendarMonthYear">Bulan Tahun</h3>
+            <button class="btn btn-ghost" onclick="changeMonth(1)">&gt;</button>
+          </div>
+          <div class="calendar-grid">
+            <div class="cal-day-name">Min</div>
+            <div class="cal-day-name">Sen</div>
+            <div class="cal-day-name">Sel</div>
+            <div class="cal-day-name">Rab</div>
+            <div class="cal-day-name">Kam</div>
+            <div class="cal-day-name">Jum</div>
+            <div class="cal-day-name">Sab</div>
+          </div>
+          <div class="calendar-grid" id="calendarDays"></div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom: 6px; color: var(--pastel-yellow);">Jadwal Tanggal: <span id="selectedDateLabel"></span></h3>
+          <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 14px;">Pengingat akan berbunyi/muncul otomatis saat halaman terbuka pada jam yang ditentukan.</p>
+
+          <div class="form-group">
+            <label>Judul Agenda / Tugas</label>
+            <input type="text" id="eventTitle" placeholder="Contoh: Kuis Biologi Bab Sel" />
+          </div>
+          <div class="form-group">
+            <label>Jam Pengingat</label>
+            <input type="time" id="eventTime" value="16:00" />
+          </div>
+          <div class="form-group">
+            <label>Catatan Jadwal</label>
+            <textarea id="eventNote" placeholder="Materi yang harus dipelajari sebelum jadwal..."></textarea>
+          </div>
+          <button class="btn btn-yellow" style="width: 100%; margin-bottom: 18px;" onclick="addCalendarEvent()">+ Tambah Pengingat</button>
+
+          <div id="eventListContainer"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. FITUR FLASH CARD MINI GAME -->
+    <section id="flashcard" class="tab-section">
+      <div class="section-header">
+        <h2>Flash Card Mini Game</h2>
+        <p>Buat kartu materimu sendiri, lalu uji ingatanmu dengan mode kuis interaktif.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="margin-bottom: 14px; color: var(--pastel-purple);">Buat Kartu Materi Baru</h3>
+          <div class="form-group">
+            <label>Topik / Mata Pelajaran</label>
+            <input type="text" id="fcTopic" placeholder="Contoh: Bahasa Inggris / Fisika" />
+          </div>
+          <div class="form-group">
+            <label>Pertanyaan / Istilah (Sisi Depan)</label>
+            <textarea id="fcQuestion" placeholder="Contoh: Apa rumus Hukum II Newton?"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Jawaban / Penjelasan (Sisi Belakang)</label>
+            <textarea id="fcAnswer" placeholder="Contoh: F = m × a (Gaya = massa × percepatan)"></textarea>
+          </div>
+          <button class="btn btn-purple" style="width: 100%;" onclick="addFlashcard()">+ Tambah ke Dek Kartu</button>
+
+          <div style="margin-top: 20px; border-top: 1px solid #2b3040; padding-top: 14px;">
+            <h4 style="font-size: 14px; margin-bottom: 10px;">Daftar Kartu Tersimpan (<span id="totalCardsCount">0</span>)</h4>
+            <div id="flashcardManageList" style="max-height: 200px; overflow-y: auto;"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="game-stats">
+            <div>
+              <span style="font-size: 12px; color: var(--text-secondary);">Filter Topik:</span>
+              <select id="fcTopicFilter" onchange="startFlashcardGame()" style="padding: 5px 8px; font-size: 13px; margin-top: 4px;">
+                <option value="ALL">Semua Topik</option>
+              </select>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 13px; color: var(--pastel-green); font-weight: bold;">Paham: <span id="scoreKnow">0</span></div>
+              <div style="font-size: 13px; color: var(--pastel-pink);">Ulangi: <span id="scoreReview">0</span></div>
+            </div>
+          </div>
+
+          <div id="gameArea">
+            <div style="text-align: center; font-size: 13px; color: var(--text-secondary);">
+              Kartu <span id="cardIndexDisplay">0</span> dari <span id="cardDeckTotal">0</span>
+            </div>
+
+            <div class="flashcard-stage" onclick="flipCard()">
+              <div class="flashcard-inner" id="flashcardInner">
+                <div class="flashcard-face flashcard-front">
+                  <span class="card-tag" id="cardTopicTag">Topik</span>
+                  <div class="flashcard-text" id="cardFrontText">Belum ada kartu. Tambahkan kartu di samping!</div>
+                  <span class="flashcard-hint">Klik kartu untuk membalik</span>
+                </div>
+                <div class="flashcard-face flashcard-back">
+                  <span class="card-tag" style="color: var(--pastel-green);">Jawaban</span>
+                  <div class="flashcard-text" id="cardBackText">Jawaban akan muncul di sini</div>
+                  <span class="flashcard-hint">Klik lagi untuk kembali ke soal</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="game-actions">
+              <button class="btn btn-pink" onclick="answerCard(false)">Belum Hafal (Ulangi)</button>
+              <button class="btn btn-green" onclick="answerCard(true)">Sudah Paham (+1)</button>
+              <button class="btn btn-ghost" onclick="shuffleDeck()">Acak Kartu</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toastBox"></div>
+
+  <footer>
+    Teman Belajar &copy; 2026 — Data tersimpan otomatis di browser perangkatmu.
+  </footer>
+
+  <script>
+    /* ================= NAVIGASI TAB ================= */
+    function switchTab(tabId, btnElement) {
+      document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btnElement.classList.add('active');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toastBox');
+      toast.textContent = message;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 4000);
+    }
+
+    /* ================= 1. TO-DO LIST & PENGELOMPOKAN ================= */
+    let todos = JSON.parse(localStorage.getItem('tb_todos')) || [
+      { id: 1, title: 'Kerjakan Latihan Soal Aljabar', group: 'Matematika', note: 'Halaman 42 nomor 1 sampai 10', completed: false },
+      { id: 2, title: 'Hafalkan Kosakata Bahasa Inggris', group: 'Bahasa Inggris', note: '20 kata kerja tidak beraturan (Irregular Verbs)', completed: false }
+    ];
+    let activeGroupFilter = 'SEMUA';
+
+    function saveTodos() {
+      localStorage.setItem('tb_todos', JSON.stringify(todos));
+      renderTodos();
+    }
+
+    function addTodo() {
+      const title = document.getElementById('todoTitle').value.trim();
+      const group = document.getElementById('todoGroup').value.trim() || 'Umum';
+      const note = document.getElementById('todoNote').value.trim();
+
+      if (!title) {
+        showToast('Judul tugas tidak boleh kosong!');
+        return;
+      }
+
+      todos.unshift({
+        id: Date.now(),
+        title,
+        group,
+        note,
+        completed: false
+      });
+
+      document.getElementById('todoTitle').value = '';
+      document.getElementById('todoNote').value = '';
+      saveTodos();
+      showToast('Tugas berhasil ditambahkan!');
+    }
+
+    function toggleTodo(id) {
+      todos = todos.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
+      saveTodos();
+    }
+
+    function deleteTodo(id) {
+      todos = todos.filter(t => t.id !== id);
+      saveTodos();
+    }
+
+    function setGroupFilter(groupName) {
+      activeGroupFilter = groupName;
+      renderTodos();
+    }
+
+    function renderTodos() {
+      const groups = ['SEMUA', ...new Set(todos.map(t => t.group))];
+      const filterBar = document.getElementById('groupFilterBar');
+      const datalist = document.getElementById('groupSuggestions');
+
+      filterBar.innerHTML = '';
+      datalist.innerHTML = '';
+
+      groups.forEach(g => {
+        const pill = document.createElement('button');
+        pill.className = `group-pill ${activeGroupFilter === g ? 'active' : ''}`;
+        pill.textContent = g;
+        pill.onclick = () => setGroupFilter(g);
+        filterBar.appendChild(pill);
+
+        if (g !== 'SEMUA') {
+          const opt = document.createElement('option');
+          opt.value = g;
+          datalist.appendChild(opt);
+        }
+      });
+
+      const container = document.getElementById('todoListContainer');
+      const filtered = activeGroupFilter === 'SEMUA'
+        ? todos
+        : todos.filter(t => t.group === activeGroupFilter);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-secondary); font-size: 14px; text-align: center; padding: 20px 0;">Belum ada tugas di kelompok ini.</p>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(t => `
+        <div class="todo-item ${t.completed ? 'completed' : ''}">
+          <div class="todo-left">
+            <input type="checkbox" class="todo-checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTodo(${t.id})" />
+            <div class="todo-content">
+              <div class="todo-meta">
+                <span class="todo-title">${escapeHTML(t.title)}</span>
+                <span class="badge-group">${escapeHTML(t.group)}</span>
+              </div>
+              ${t.note ? `<div class="todo-note">${escapeHTML(t.note)}</div>` : ''}
+            </div>
+          </div>
+          <button class="icon-btn" title="Hapus Tugas" onclick="deleteTodo(${t.id})">✕</button>
+        </div>
+      `).join('');
+    }
+
+    /* ================= 2. TIMER POMODORO ================= */
+    let timerMode = 'focus';
+    let focusMinutes = 25;
+    let breakMinutes = 5;
+    let timeLeft = focusMinutes * 60;
+    let timerInterval = null;
+    let isRunning = false;
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+      const secs = (timeLeft % 60).toString().padStart(2, '0');
+      document.getElementById('timerDisplay').textContent = `${mins}:${secs}`;
+    }
+
+    function setTimerMode(mode) {
+      pauseTimer();
+      timerMode = mode;
+      document.getElementById('btnModeFocus').classList.toggle('active', mode === 'focus');
+      document.getElementById('btnModeBreak').classList.toggle('active', mode === 'break');
+
+      const circle = document.getElementById('timerCircle');
+      const status = document.getElementById('timerStatus');
+
+      if (mode === 'focus') {
+        timeLeft = focusMinutes * 60;
+        circle.style.borderColor = 'var(--pastel-pink)';
+        status.style.color = 'var(--pastel-pink)';
+        status.textContent = 'Mode Fokus Belajar';
+      } else {
+        timeLeft = breakMinutes * 60;
+        circle.style.borderColor = 'var(--pastel-green)';
+        status.style.color = 'var(--pastel-green)';
+        status.textContent = 'Mode Istirahat Sejenak';
+      }
+      updateTimerDisplay();
+    }
+
+    function updateCustomDurations() {
+      const fVal = parseInt(document.getElementById('focusInput').value);
+      const bVal = parseInt(document.getElementById('breakInput').value);
+      if (fVal >= 1) focusMinutes = fVal;
+      if (bVal >= 1) breakMinutes = bVal;
+      if (!isRunning) {
+        timeLeft = (timerMode === 'focus' ? focusMinutes : breakMinutes) * 60;
+        updateTimerDisplay();
+      }
+    }
+
+    function toggleTimer() {
+      if (isRunning) {
+        pauseTimer();
+      } else {
+        isRunning = true;
+        document.getElementById('startPauseBtn').textContent = 'Jeda';
+        document.getElementById('timerStatus').textContent = timerMode === 'focus' ? 'Sedang Fokus...' : 'Sedang Istirahat...';
+        timerInterval = setInterval(() => {
+          if (timeLeft > 0) {
+            timeLeft--;
+            updateTimerDisplay();
+          } else {
+            pauseTimer();
+            playBeep();
+            showToast(timerMode === 'focus' ? 'Waktu fokus selesai! Saatnya istirahat.' : 'Istirahat selesai! Ayo lanjut belajar.');
+            setTimerMode(timerMode === 'focus' ? 'break' : 'focus');
+          }
+        }, 1000);
+      }
+    }
+
+    function pauseTimer() {
+      isRunning = false;
+      clearInterval(timerInterval);
+      document.getElementById('startPauseBtn').textContent = 'Mulai';
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      timeLeft = (timerMode === 'focus' ? focusMinutes : breakMinutes) * 60;
+      document.getElementById('timerStatus').textContent = timerMode === 'focus' ? 'Siap Belajar' : 'Siap Istirahat';
+      updateTimerDisplay();
+    }
+
+    function playBeep() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(660, ctx.currentTime);
+        osc.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.4);
+      } catch (e) {}
+    }
+
+    /* ================= 3. KALENDER & PENGINGAT ================= */
+    let currentCalDate = new Date();
+    let selectedDateStr = formatDateKey(new Date());
+    let calendarEvents = JSON.parse(localStorage.getItem('tb_events')) || [];
+
+    function formatDateKey(dateObj) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const d = String(dateObj.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function renderCalendar() {
+      const year = currentCalDate.getFullYear();
+      const month = currentCalDate.getMonth();
+      const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+      document.getElementById('calendarMonthYear').textContent = `${monthNames[month]} ${year}`;
+      document.getElementById('selectedDateLabel').textContent = selectedDateStr;
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const todayStr = formatDateKey(new Date());
+
+      const grid = document.getElementById('calendarDays');
+      grid.innerHTML = '';
+
+      for (let i = 0; i < firstDay; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'cal-cell empty';
+        grid.appendChild(emptyCell);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const dayEvents = calendarEvents.filter(e => e.date === dateKey);
+
+        const cell = document.createElement('div');
+        cell.className = `cal-cell ${dateKey === todayStr ? 'today' : ''} ${dateKey === selectedDateStr ? 'selected' : ''}`;
+        cell.onclick = () => {
+          selectedDateStr = dateKey;
+          renderCalendar();
+          renderDayEvents();
+        };
+
+        const dotsHtml = dayEvents.slice(0, 4).map(() => `<span class="cal-dot"></span>`).join('');
+        cell.innerHTML = `
+          <span class="cal-date-num">${day}</span>
+          <div class="cal-dot-wrap">${dotsHtml}</div>
+        `;
+        grid.appendChild(cell);
+      }
+      renderDayEvents();
+    }
+
+    function changeMonth(step) {
+      currentCalDate.setMonth(currentCalDate.getMonth() + step);
+      renderCalendar();
+    }
+
+    function addCalendarEvent() {
+      const title = document.getElementById('eventTitle').value.trim();
+      const time = document.getElementById('eventTime').value || '08:00';
+      const note = document.getElementById('eventNote').value.trim();
+
+      if (!title) {
+        showToast('Isi judul agenda terlebih dahulu!');
+        return;
+      }
+
+      calendarEvents.push({
+        id: Date.now(),
+        date: selectedDateStr,
+        time,
+        title,
+        note,
+        reminded: false
+      });
+
+      localStorage.setItem('tb_events', JSON.stringify(calendarEvents));
+      document.getElementById('eventTitle').value = '';
+      document.getElementById('eventNote').value = '';
+      renderCalendar();
+      showToast('Jadwal & pengingat disimpan!');
+    }
+
+    function deleteEvent(id) {
+      calendarEvents = calendarEvents.filter(e => e.id !== id);
+      localStorage.setItem('tb_events', JSON.stringify(calendarEvents));
+      renderCalendar();
+    }
+
+    function renderDayEvents() {
+      const list = document.getElementById('eventListContainer');
+      const dayEvents = calendarEvents
+        .filter(e => e.date === selectedDateStr)
+        .sort((a, b) => a.time.localeCompare(b.time));
+
+      if (dayEvents.length === 0) {
+        list.innerHTML = `<p style="color: var(--text-secondary); font-size: 13px; text-align: center;">Tidak ada jadwal pada tanggal ini.</p>`;
+        return;
+      }
+
+      list.innerHTML = dayEvents.map(ev => `
+        <div class="event-item">
+          <div>
+            <div class="event-time">Pukul ${ev.time}</div>
+            <div style="font-weight: bold; font-size: 14px; margin: 2px 0;">${escapeHTML(ev.title)}</div>
+            ${ev.note ? `<div style="font-size: 12px; color: var(--text-secondary);">${escapeHTML(ev.note)}</div>` : ''}
+          </div>
+          <button class="icon-btn" onclick="deleteEvent(${ev.id})">✕</button>
+        </div>
+      `).join('');
+    }
+
+    // Pengecekan Pengingat Otomatis Setiap 15 Detik
+    setInterval(() => {
+      const now = new Date();
+      const todayKey = formatDateKey(now);
+      const currentHM = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      let updated = false;
+      calendarEvents.forEach(ev => {
+        if (ev.date === todayKey && ev.time === currentHM && !ev.reminded) {
+          ev.reminded = true;
+          updated = true;
+          playBeep();
+          showToast(`PENGINGAT (${ev.time}): ${ev.title}`);
+        }
+      });
+
+      if (updated) {
+        localStorage.setItem('tb_events', JSON.stringify(calendarEvents));
+      }
+    }, 15000);
+
+    /* ================= 4. FLASH CARD MINI GAME ================= */
+    let flashcards = JSON.parse(localStorage.getItem('tb_flashcards')) || [
+      { id: 1, topic: 'Biologi', q: 'Organel sel yang berfungsi sebagai tempat respirasi seluler dan penghasil energi (ATP) adalah?', a: 'Mitokondria' },
+      { id: 2, topic: 'Fisika', q: 'Apa satuan SI untuk gaya?', a: 'Newton (N)' },
+      { id: 3, topic: 'Sejarah', q: 'Kapan Proklamasi Kemerdekaan Indonesia dibacakan?', a: '17 Agustus 1945' }
+    ];
+
+    let gameDeck = [];
+    let currentCardIndex = 0;
+    let scoreKnow = 0;
+    let scoreReview = 0;
+
+    function saveFlashcards() {
+      localStorage.setItem('tb_flashcards', JSON.stringify(flashcards));
+      updateFlashcardTopics();
+      renderManageFlashcards();
+      startFlashcardGame();
+    }
+
+    function addFlashcard() {
+      const topic = document.getElementById('fcTopic').value.trim() || 'Umum';
+      const q = document.getElementById('fcQuestion').value.trim();
+      const a = document.getElementById('fcAnswer').value.trim();
+
+      if (!q || !a) {
+        showToast('Pertanyaan dan jawaban harus diisi!');
+        return;
+      }
+
+      flashcards.push({ id: Date.now(), topic, q, a });
+      document.getElementById('fcQuestion').value = '';
+      document.getElementById('fcAnswer').value = '';
+      saveFlashcards();
+      showToast('Kartu materi berhasil ditambahkan!');
+    }
+
+    function deleteFlashcard(id) {
+      flashcards = flashcards.filter(c => c.id !== id);
+      saveFlashcards();
+    }
+
+    function updateFlashcardTopics() {
+      const select = document.getElementById('fcTopicFilter');
+      const currentVal = select.value;
+      const topics = [...new Set(flashcards.map(c => c.topic))];
+
+      select.innerHTML = `<option value="ALL">Semua Topik (${flashcards.length})</option>`;
+      topics.forEach(t => {
+        const count = flashcards.filter(c => c.topic === t).length;
+        select.innerHTML += `<option value="${escapeHTML(t)}">${escapeHTML(t)} (${count})</option>`;
+      });
+      if ([...select.options].some(o => o.value === currentVal)) {
+        select.value = currentVal;
+      }
+    }
+
+    function renderManageFlashcards() {
+      document.getElementById('totalCardsCount').textContent = flashcards.length;
+      const container = document.getElementById('flashcardManageList');
+      if (flashcards.length === 0) {
+        container.innerHTML = `<p style="font-size: 12px; color: var(--text-secondary);">Belum ada kartu.</p>`;
+        return;
+      }
+      container.innerHTML = flashcards.map(c => `
+        <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-input); padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:13px;">
+          <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:85%;">
+            <strong style="color:var(--pastel-purple);">[${escapeHTML(c.topic)}]</strong> ${escapeHTML(c.q)}
+          </div>
+          <button class="icon-btn" onclick="deleteFlashcard(${c.id})">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function startFlashcardGame() {
+      const filter = document.getElementById('fcTopicFilter').value;
+      gameDeck = filter === 'ALL' ? [...flashcards] : flashcards.filter(c => c.topic === filter);
+      currentCardIndex = 0;
+      scoreKnow = 0;
+      scoreReview = 0;
+      updateGameScoreUI();
+      showCurrentCard();
+    }
+
+    function shuffleDeck() {
+      for (let i = gameDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [gameDeck[i], gameDeck[j]] = [gameDeck[j], gameDeck[i]];
+      }
+      currentCardIndex = 0;
+      showCurrentCard();
+      showToast('Dek kartu diacak!');
+    }
+
+    function showCurrentCard() {
+      const inner = document.getElementById('flashcardInner');
+      inner.classList.remove('flipped');
+
+      document.getElementById('cardDeckTotal').textContent = gameDeck.length;
+
+      if (gameDeck.length === 0) {
+        document.getElementById('cardIndexDisplay').textContent = 0;
+        document.getElementById('cardTopicTag').textContent = 'Kosong';
+        document.getElementById('cardFrontText').textContent = 'Belum ada kartu pada topik ini.';
+        document.getElementById('cardBackText').textContent = 'Silakan tambah kartu baru.';
+        return;
+      }
+
+      const card = gameDeck[currentCardIndex];
+      document.getElementById('cardIndexDisplay').textContent = currentCardIndex + 1;
+      document.getElementById('cardTopicTag').textContent = card.topic;
+      document.getElementById('cardFrontText').textContent = card.q;
+      document.getElementById('cardBackText').textContent = card.a;
+    }
+
+    function flipCard() {
+      if (gameDeck.length === 0) return;
+      document.getElementById('flashcardInner').classList.toggle('flipped');
+    }
+
+    function answerCard(isKnown) {
+      if (gameDeck.length === 0) return;
+
+      if (isKnown) {
+        scoreKnow++;
+      } else {
+        scoreReview++;
+        // Masukkan kembali kartu yang belum hafal ke akhir antrean
+        gameDeck.push(gameDeck[currentCardIndex]);
+      }
+
+      updateGameScoreUI();
+      currentCardIndex++;
+
+      if (currentCardIndex >= gameDeck.length) {
+        showToast(`Sesi selesai! Skor Paham: ${scoreKnow}. Mengulang dari awal.`);
+        startFlashcardGame();
+      } else {
+        showCurrentCard();
+      }
+    }
+
+    function updateGameScoreUI() {
+      document.getElementById('scoreKnow').textContent = scoreKnow;
+      document.getElementById('scoreReview').textContent = scoreReview;
+    }
+
+    /* ================= HELPER KEAMANAN TEKS ================= */
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[tag]));
+    }
+
+    /* ================= INISIALISASI AWAL ================= */
+    renderTodos();
+    updateTimerDisplay();
+    renderCalendar();
+    updateFlashcardTopics();
+    renderManageFlashcards();
+    startFlashcardGame();
+  </script>
+</body>
+</html>
